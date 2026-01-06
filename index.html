@@ -18,7 +18,7 @@
             -webkit-tap-highlight-color: transparent; /* Menghilangkan highlight biru default pada Android/iOS */
         }
         
-        /* Animasi halus untuk background */
+        /* Animasi halus untuk background blob */
         @keyframes float {
             0% { transform: translate(0px, 0px) scale(1); }
             33% { transform: translate(30px, -50px) scale(1.1); }
@@ -33,15 +33,65 @@
         .animation-delay-2000 {
             animation-delay: 2s;
         }
+
+        /* --- Animasi Roket --- */
+        @keyframes rocket-fly {
+            0% {
+                transform: translate(-10vw, 110vh) rotate(45deg) scale(0.5);
+                opacity: 0;
+            }
+            5% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translate(110vw, -20vh) rotate(45deg) scale(0.8);
+                opacity: 0;
+            }
+        }
+
+        .rocket {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1; /* Di atas background, di bawah konten */
+            /* Animasi berjalan selama 15 detik, berulang selamanya */
+            animation: rocket-fly 15s linear infinite; 
+            filter: drop-shadow(0 0 15px rgba(255, 140, 0, 0.6)); /* Efek api */
+        }
+        
+        /* Asap roket (opsional, menggunakan pseudo-element) */
+        .rocket::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 10px;
+            height: 40px;
+            background: linear-gradient(to bottom, rgba(255,100,0,0.8), transparent);
+            filter: blur(4px);
+            z-index: -1;
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-teal-900 via-teal-800 to-emerald-900 text-white min-h-screen relative overflow-x-hidden selection:bg-teal-500 selection:text-white">
 
-    <!-- Efek Latar Belakang Bergerak -->
+    <!-- Efek Latar Belakang Bergerak & Roket -->
     <div class="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
+        <!-- Blobs -->
         <div class="absolute top-0 left-1/4 w-72 h-72 bg-teal-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
         <div class="absolute top-0 right-1/4 w-72 h-72 bg-emerald-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
         <div class="absolute -bottom-32 left-1/2 w-72 h-72 bg-cyan-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+
+        <!-- ROKET -->
+        <div class="rocket text-orange-400">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
+            </svg>
+        </div>
     </div>
 
     <!-- Konten Utama -->
