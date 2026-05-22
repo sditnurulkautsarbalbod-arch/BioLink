@@ -6,90 +6,118 @@
     <title>SD IT Nurul Kautsar</title>
     <meta name="description" content="Tautan Resmi SD IT Nurul Kautsar">
     
-    <!-- Memuat Tailwind CSS -->
+    <!-- Memuat Tailwind CSS dengan konfigurasi Dark Mode -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class', // Menggunakan class 'dark' pada tag <html>
+            theme: {
+                extend: {}
+            }
+        }
+    </script>
     
-    <!-- Memuat Google Fonts (Plus Jakarta Sans - Lebih modern untuk mobile) -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            -webkit-tap-highlight-color: transparent; /* Menghilangkan highlight biru default pada Android/iOS */
+            -webkit-tap-highlight-color: transparent;
         }
         
-        /* Animasi halus untuk background blob */
-        @keyframes float {
-            0% { transform: translate(0px, 0px) scale(1); }
-            33% { transform: translate(30px, -50px) scale(1.1); }
-            66% { transform: translate(-20px, 20px) scale(0.9); }
-            100% { transform: translate(0px, 0px) scale(1); }
-        }
-        
-        .animate-blob {
-            animation: float 10s infinite ease-in-out;
-        }
-        
-        .animation-delay-2000 {
-            animation-delay: 2s;
+        /* --- Animasi Awan --- */
+        @keyframes drift {
+            0% { transform: translateX(-150px); }
+            100% { transform: translateX(110vw); }
         }
 
-        /* --- Animasi Roket --- */
-        @keyframes rocket-fly {
-            0% {
-                transform: translate(-10vw, 110vh) rotate(45deg) scale(0.5);
-                opacity: 0;
-            }
-            5% {
-                opacity: 0.8;
-            }
-            90% {
-                opacity: 0.8;
-            }
-            100% {
-                transform: translate(110vw, -20vh) rotate(45deg) scale(0.8);
-                opacity: 0;
-            }
+        .cloud {
+            position: absolute;
+            transition: all 1s ease-in-out;
         }
 
-        .rocket {
-            position: absolute;
-            width: 60px;
-            height: 60px;
-            z-index: 1; /* Di atas background, di bawah konten */
-            /* Animasi berjalan selama 15 detik, berulang selamanya */
-            animation: rocket-fly 15s linear infinite; 
-            filter: drop-shadow(0 0 15px rgba(255, 140, 0, 0.6)); /* Efek api */
-        }
+        /* Konfigurasi kecepatan, ukuran, dan posisi awan */
+        .cloud-1 { top: 8%; width: 140px; animation: drift 40s linear infinite; left: -150px; }
+        .cloud-2 { top: 22%; width: 220px; animation: drift 55s linear infinite 8s; left: -250px; }
+        .cloud-3 { top: 38%; width: 130px; animation: drift 30s linear infinite 3s; left: -150px; }
+        .cloud-4 { top: 60%; width: 180px; animation: drift 48s linear infinite 15s; left: -200px; }
+        .cloud-5 { top: 78%; width: 260px; animation: drift 65s linear infinite 1s; left: -300px; }
         
-        /* Asap roket (opsional, menggunakan pseudo-element) */
-        .rocket::after {
-            content: '';
+        /* --- Animasi Bintang Kelap-kelip --- */
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+        .star {
             position: absolute;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 10px;
-            height: 40px;
-            background: linear-gradient(to bottom, rgba(255,100,0,0.8), transparent);
-            filter: blur(4px);
-            z-index: -1;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle infinite ease-in-out;
         }
     </style>
 </head>
-<body class="bg-gradient-to-br from-teal-900 via-teal-800 to-emerald-900 text-white min-h-screen relative overflow-x-hidden selection:bg-teal-500 selection:text-white">
+<body class="bg-gradient-to-b from-sky-400 via-sky-300 to-sky-100 dark:from-slate-900 dark:via-indigo-950 dark:to-slate-900 text-slate-800 dark:text-slate-100 min-h-screen relative overflow-x-hidden selection:bg-sky-500 selection:text-white transition-colors duration-1000 ease-in-out">
 
-    <!-- Efek Latar Belakang Bergerak & Roket -->
+    <!-- Tombol Toggle Day/Night -->
+    <button id="themeToggle" class="fixed top-4 right-4 z-50 p-3 rounded-full bg-white/40 dark:bg-slate-800/60 backdrop-blur-md shadow-lg border border-white/60 dark:border-slate-600 transition-all hover:scale-110 active:scale-95 text-slate-700 dark:text-yellow-400" aria-label="Toggle Dark Mode">
+        <!-- Ikon Matahari (Muncul saat Malam/Dark Mode, untuk kembali ke Siang) -->
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hidden dark:block">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.773l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
+        </svg>
+        <!-- Ikon Bulan (Muncul saat Siang/Light Mode, untuk beralih ke Malam) -->
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 block dark:hidden">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />
+        </svg>
+    </button>
+
+    <!-- Latar Belakang Cuaca & Waktu -->
     <div class="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
-        <!-- Blobs -->
-        <div class="absolute top-0 left-1/4 w-72 h-72 bg-teal-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-        <div class="absolute top-0 right-1/4 w-72 h-72 bg-emerald-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
-        <div class="absolute -bottom-32 left-1/2 w-72 h-72 bg-cyan-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+        
+        <!-- Bintang (Hanya muncul saat malam) -->
+        <div class="absolute inset-0 opacity-0 dark:opacity-100 transition-opacity duration-1000">
+            <div class="star w-1 h-1 top-[10%] left-[20%]" style="animation-duration: 3s; animation-delay: 0s;"></div>
+            <div class="star w-1.5 h-1.5 top-[25%] left-[70%]" style="animation-duration: 4s; animation-delay: 1s;"></div>
+            <div class="star w-1 h-1 top-[40%] left-[30%]" style="animation-duration: 2s; animation-delay: 0.5s;"></div>
+            <div class="star w-2 h-2 top-[15%] left-[85%]" style="animation-duration: 5s; animation-delay: 2s;"></div>
+            <div class="star w-1 h-1 top-[60%] left-[60%]" style="animation-duration: 3.5s; animation-delay: 1.5s;"></div>
+            <div class="star w-1.5 h-1.5 top-[80%] left-[15%]" style="animation-duration: 4.5s; animation-delay: 0.2s;"></div>
+            <div class="star w-1 h-1 top-[70%] left-[80%]" style="animation-duration: 2.5s; animation-delay: 1.2s;"></div>
+        </div>
 
-        <!-- ROKET -->
-        <div class="rocket text-orange-400">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
+        <!-- Bulan (Muncul dari bawah saat malam) -->
+        <div class="absolute top-16 left-16 w-24 h-24 bg-yellow-100 rounded-full shadow-[0_0_50px_10px_rgba(253,224,71,0.3)] 
+                    opacity-0 translate-y-20 dark:opacity-100 dark:translate-y-0 transition-all duration-1000 ease-out">
+            <!-- Kawah Bulan Dekoratif -->
+            <div class="absolute top-4 left-4 w-6 h-6 bg-yellow-200/50 rounded-full mix-blend-multiply blur-[1px]"></div>
+            <div class="absolute bottom-6 right-8 w-4 h-4 bg-yellow-200/40 rounded-full mix-blend-multiply blur-[1px]"></div>
+            <div class="absolute top-10 right-4 w-5 h-5 bg-yellow-200/60 rounded-full mix-blend-multiply blur-[1px]"></div>
+        </div>
+
+        <!-- Awan -->
+        <!-- Class warna awan akan beradaptasi: putih saat siang (opacity tinggi), gelap kebiruan saat malam (opacity rendah) -->
+        <div class="text-white drop-shadow-[0_10px_15px_rgba(255,255,255,0.6)] opacity-95 dark:text-indigo-900/40 dark:drop-shadow-[0_10px_15px_rgba(0,0,0,0.5)] transition-all duration-1000">
+            <svg class="cloud cloud-1" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18 16.5C19.933 16.5 21.5 14.933 21.5 13C21.5 11.1396 20.0469 9.61907 18.2127 9.50567C17.7011 6.36854 14.9814 4 11.75 4C8.16015 4 5.25 6.91015 5.25 10.5C5.25 10.5367 5.25031 10.5732 5.25091 10.6096C3.41846 10.8754 2 12.4414 2 14.375C2 16.5151 3.7349 18.25 5.875 18.25H18Z" />
+            </svg>
+        </div>
+        <div class="text-white drop-shadow-[0_10px_15px_rgba(255,255,255,0.6)] opacity-80 dark:text-indigo-900/30 dark:drop-shadow-[0_10px_15px_rgba(0,0,0,0.5)] transition-all duration-1000">
+            <svg class="cloud cloud-2" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18 16.5C19.933 16.5 21.5 14.933 21.5 13C21.5 11.1396 20.0469 9.61907 18.2127 9.50567C17.7011 6.36854 14.9814 4 11.75 4C8.16015 4 5.25 6.91015 5.25 10.5C5.25 10.5367 5.25031 10.5732 5.25091 10.6096C3.41846 10.8754 2 12.4414 2 14.375C2 16.5151 3.7349 18.25 5.875 18.25H18Z" />
+            </svg>
+        </div>
+        <div class="text-white drop-shadow-[0_10px_15px_rgba(255,255,255,0.6)] opacity-90 dark:text-indigo-900/50 dark:drop-shadow-[0_10px_15px_rgba(0,0,0,0.5)] transition-all duration-1000">
+            <svg class="cloud cloud-3" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18 16.5C19.933 16.5 21.5 14.933 21.5 13C21.5 11.1396 20.0469 9.61907 18.2127 9.50567C17.7011 6.36854 14.9814 4 11.75 4C8.16015 4 5.25 6.91015 5.25 10.5C5.25 10.5367 5.25031 10.5732 5.25091 10.6096C3.41846 10.8754 2 12.4414 2 14.375C2 16.5151 3.7349 18.25 5.875 18.25H18Z" />
+            </svg>
+        </div>
+        <div class="text-white drop-shadow-[0_10px_15px_rgba(255,255,255,0.6)] opacity-70 dark:text-indigo-900/30 dark:drop-shadow-[0_10px_15px_rgba(0,0,0,0.5)] transition-all duration-1000">
+            <svg class="cloud cloud-4" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18 16.5C19.933 16.5 21.5 14.933 21.5 13C21.5 11.1396 20.0469 9.61907 18.2127 9.50567C17.7011 6.36854 14.9814 4 11.75 4C8.16015 4 5.25 6.91015 5.25 10.5C5.25 10.5367 5.25031 10.5732 5.25091 10.6096C3.41846 10.8754 2 12.4414 2 14.375C2 16.5151 3.7349 18.25 5.875 18.25H18Z" />
+            </svg>
+        </div>
+        <div class="text-white drop-shadow-[0_10px_15px_rgba(255,255,255,0.6)] opacity-85 dark:text-indigo-900/40 dark:drop-shadow-[0_10px_15px_rgba(0,0,0,0.5)] transition-all duration-1000">
+            <svg class="cloud cloud-5" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18 16.5C19.933 16.5 21.5 14.933 21.5 13C21.5 11.1396 20.0469 9.61907 18.2127 9.50567C17.7011 6.36854 14.9814 4 11.75 4C8.16015 4 5.25 6.91015 5.25 10.5C5.25 10.5367 5.25031 10.5732 5.25091 10.6096C3.41846 10.8754 2 12.4414 2 14.375C2 16.5151 3.7349 18.25 5.875 18.25H18Z" />
             </svg>
         </div>
     </div>
@@ -100,17 +128,17 @@
         <!-- Header Profil -->
         <header class="flex flex-col items-center text-center mb-8 space-y-4">
             <!-- Placeholder Logo (Icon Sekolah) -->
-            <div class="w-24 h-24 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center shadow-xl ring-4 ring-white/5 mb-2">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 text-teal-200">
+            <div class="w-24 h-24 bg-white/50 dark:bg-slate-800/50 backdrop-blur-md rounded-full flex items-center justify-center shadow-lg ring-4 ring-white/60 dark:ring-slate-600/50 mb-2 transition-all duration-700">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 text-sky-600 dark:text-sky-300 transition-colors duration-700">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.499 5.24 50.552 50.552 0 00-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5" />
                 </svg>
             </div>
             
             <div class="space-y-1">
-                <h1 class="text-2xl font-bold tracking-tight text-white drop-shadow-sm">
+                <h1 class="text-2xl font-bold tracking-tight text-slate-800 dark:text-white drop-shadow-sm transition-colors duration-700">
                     SD IT Nurul Kautsar
                 </h1>
-                <p class="text-teal-200 text-sm font-medium">Portal Informasi & Akademik</p>
+                <p class="text-slate-600 dark:text-slate-300 text-sm font-medium transition-colors duration-700">Portal Informasi & Akademik</p>
             </div>
         </header>
 
@@ -119,16 +147,14 @@
 
             <!-- Link 1: Jurnal -->
             <a href="https://jurnalnk.vercel.app//" target="_blank" rel="noopener noreferrer" 
-               class="group relative flex items-center p-4 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-2xl border border-white/10 shadow-lg transition-all duration-200 active:scale-[0.98]">
-                <div class="flex-shrink-0 w-10 h-10 bg-teal-500/20 rounded-xl flex items-center justify-center text-teal-200 group-hover:bg-teal-500 group-hover:text-white transition-colors">
-                    <!-- Icon Clipboard -->
+               class="group relative flex items-center p-4 bg-white/40 hover:bg-white/60 dark:bg-slate-800/40 dark:hover:bg-slate-700/60 backdrop-blur-md rounded-2xl border border-white/60 dark:border-slate-600/50 shadow-lg transition-all duration-200 active:scale-[0.98]">
+                <div class="flex-shrink-0 w-10 h-10 bg-white/70 dark:bg-slate-700 rounded-xl flex items-center justify-center text-sky-600 dark:text-sky-300 group-hover:bg-sky-500 group-hover:text-white transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M11.35 3.836c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z" />
                     </svg>
                 </div>
-                <span class="flex-grow text-center font-semibold text-white tracking-wide">Jurnal dan Absen</span>
-                <!-- Panah Kanan (Indikator Klik) -->
-                <div class="absolute right-4 text-white/30 group-hover:text-white/80 group-hover:translate-x-1 transition-all">
+                <span class="flex-grow text-center font-semibold text-slate-700 dark:text-slate-200 tracking-wide transition-colors duration-700">Jurnal dan Absen</span>
+                <div class="absolute right-4 text-slate-400 dark:text-slate-500 group-hover:text-sky-600 dark:group-hover:text-sky-300 group-hover:translate-x-1 transition-all">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
                     </svg>
@@ -136,59 +162,75 @@
             </a>
 
             <!-- Group Ujian (Divider text) -->
-            <div class="py-2 flex items-center gap-2 opacity-60">
-                <div class="h-px bg-white/30 flex-grow"></div>
-                <span class="text-xs font-bold uppercase tracking-wider text-teal-100">Ujian Online</span>
-                <div class="h-px bg-white/30 flex-grow"></div>
+            <div class="py-2 flex items-center gap-2 opacity-80">
+                <div class="h-px bg-white/60 dark:bg-slate-600/50 flex-grow"></div>
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Ujian Online</span>
+                <div class="h-px bg-white/60 dark:bg-slate-600/50 flex-grow"></div>
             </div>
 
             <!-- Link 2: Kelas 4 -->
             <a href="https://sditnurulkautsarbalbod-arch.github.io/CBT-KLS4/" target="_blank" rel="noopener noreferrer" 
-               class="group relative flex items-center p-3.5 bg-white/5 hover:bg-white/15 backdrop-blur-md rounded-xl border border-white/5 shadow-md transition-all duration-200 active:scale-[0.98]">
-                <div class="flex-shrink-0 w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center text-emerald-300 group-hover:bg-emerald-500 group-hover:text-white transition-colors">
+               class="group relative flex items-center p-3.5 bg-white/30 hover:bg-white/50 dark:bg-slate-800/30 dark:hover:bg-slate-700/50 backdrop-blur-md rounded-xl border border-white/50 dark:border-slate-600/50 shadow-md transition-all duration-200 active:scale-[0.98]">
+                <div class="flex-shrink-0 w-8 h-8 bg-white/70 dark:bg-slate-700 rounded-lg flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:bg-emerald-500 group-hover:text-white transition-colors">
                     <span class="font-bold text-sm">4</span>
                 </div>
-                <span class="flex-grow text-center font-medium text-white">Ujian Kelas 4</span>
+                <span class="flex-grow text-center font-medium text-slate-700 dark:text-slate-200 transition-colors duration-700">Ujian Kelas 4</span>
                 <div class="w-6"></div>
             </a>
 
             <!-- Link 3: Kelas 5 -->
             <a href="https://sditnurulkautsarbalbod-arch.github.io/CBT-KLS5/" target="_blank" rel="noopener noreferrer" 
-               class="group relative flex items-center p-3.5 bg-white/5 hover:bg-white/15 backdrop-blur-md rounded-xl border border-white/5 shadow-md transition-all duration-200 active:scale-[0.98]">
-                <div class="flex-shrink-0 w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center text-emerald-300 group-hover:bg-emerald-500 group-hover:text-white transition-colors">
+               class="group relative flex items-center p-3.5 bg-white/30 hover:bg-white/50 dark:bg-slate-800/30 dark:hover:bg-slate-700/50 backdrop-blur-md rounded-xl border border-white/50 dark:border-slate-600/50 shadow-md transition-all duration-200 active:scale-[0.98]">
+                <div class="flex-shrink-0 w-8 h-8 bg-white/70 dark:bg-slate-700 rounded-lg flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:bg-emerald-500 group-hover:text-white transition-colors">
                     <span class="font-bold text-sm">5</span>
                 </div>
-                <span class="flex-grow text-center font-medium text-white">Ujian Kelas 5</span>
+                <span class="flex-grow text-center font-medium text-slate-700 dark:text-slate-200 transition-colors duration-700">Ujian Kelas 5</span>
                 <div class="w-6"></div>
             </a>
 
             <!-- Link 4: Kelas 6 -->
             <a href="https://sditnurulkautsarbalbod-arch.github.io/CBT-KLS6/" target="_blank" rel="noopener noreferrer" 
-               class="group relative flex items-center p-3.5 bg-white/5 hover:bg-white/15 backdrop-blur-md rounded-xl border border-white/5 shadow-md transition-all duration-200 active:scale-[0.98]">
-                <div class="flex-shrink-0 w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center text-emerald-300 group-hover:bg-emerald-500 group-hover:text-white transition-colors">
+               class="group relative flex items-center p-3.5 bg-white/30 hover:bg-white/50 dark:bg-slate-800/30 dark:hover:bg-slate-700/50 backdrop-blur-md rounded-xl border border-white/50 dark:border-slate-600/50 shadow-md transition-all duration-200 active:scale-[0.98]">
+                <div class="flex-shrink-0 w-8 h-8 bg-white/70 dark:bg-slate-700 rounded-lg flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:bg-emerald-500 group-hover:text-white transition-colors">
                     <span class="font-bold text-sm">6</span>
                 </div>
-                <span class="flex-grow text-center font-medium text-white">Ujian Kelas 6</span>
+                <span class="flex-grow text-center font-medium text-slate-700 dark:text-slate-200 transition-colors duration-700">Ujian Kelas 6</span>
                 <div class="w-6"></div>
             </a>
 
              <!-- Group Informasi (Divider text) -->
-             <div class="py-2 flex items-center gap-2 opacity-60">
-                <div class="h-px bg-white/30 flex-grow"></div>
-                <span class="text-xs font-bold uppercase tracking-wider text-teal-100">Informasi</span>
-                <div class="h-px bg-white/30 flex-grow"></div>
+             <div class="py-2 flex items-center gap-2 opacity-80">
+                <div class="h-px bg-white/60 dark:bg-slate-600/50 flex-grow"></div>
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Informasi</span>
+                <div class="h-px bg-white/60 dark:bg-slate-600/50 flex-grow"></div>
             </div>
+
+            <!-- Pembuatan Soal Ujian -->
+            <a href="https://buatsoal-nk.vercel.app/" target="_blank" rel="noopener noreferrer" 
+               class="group relative flex items-center p-4 bg-white/40 hover:bg-white/60 dark:bg-slate-800/40 dark:hover:bg-slate-700/60 backdrop-blur-md rounded-2xl border border-white/60 dark:border-slate-600/50 shadow-lg transition-all duration-200 active:scale-[0.98]">
+                <div class="flex-shrink-0 w-10 h-10 bg-white/70 dark:bg-slate-700 rounded-xl flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:bg-emerald-500 group-hover:text-white transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <span class="flex-grow text-center font-semibold text-slate-700 dark:text-slate-200 tracking-wide transition-colors duration-700">Pembuatan Soal Ujian</span>
+                <div class="absolute right-4 text-slate-400 dark:text-slate-500 group-hover:text-emerald-500 dark:group-hover:text-emerald-400 group-hover:translate-x-1 transition-all">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                    </svg>
+                </div>
+            </a>
 
             <!-- Link 5: Kalender -->
             <a href="https://sditnurulkautsarbalbod-arch.github.io/Kaldik/" target="_blank" rel="noopener noreferrer" 
-               class="group relative flex items-center p-4 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-2xl border border-white/10 shadow-lg transition-all duration-200 active:scale-[0.98]">
-                <div class="flex-shrink-0 w-10 h-10 bg-cyan-500/20 rounded-xl flex items-center justify-center text-cyan-200 group-hover:bg-cyan-500 group-hover:text-white transition-colors">
+               class="group relative flex items-center p-4 bg-white/40 hover:bg-white/60 dark:bg-slate-800/40 dark:hover:bg-slate-700/60 backdrop-blur-md rounded-2xl border border-white/60 dark:border-slate-600/50 shadow-lg transition-all duration-200 active:scale-[0.98]">
+                <div class="flex-shrink-0 w-10 h-10 bg-white/70 dark:bg-slate-700 rounded-xl flex items-center justify-center text-cyan-600 dark:text-cyan-400 group-hover:bg-cyan-500 group-hover:text-white transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
                     </svg>
                 </div>
-                <span class="flex-grow text-center font-semibold text-white tracking-wide">Kalender Pendidikan</span>
-                <div class="absolute right-4 text-white/30 group-hover:text-white/80 group-hover:translate-x-1 transition-all">
+                <span class="flex-grow text-center font-semibold text-slate-700 dark:text-slate-200 tracking-wide transition-colors duration-700">Kalender Pendidikan</span>
+                <div class="absolute right-4 text-slate-400 dark:text-slate-500 group-hover:text-cyan-600 dark:group-hover:text-cyan-400 group-hover:translate-x-1 transition-all">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
                     </svg>
@@ -197,14 +239,14 @@
 
             <!-- Link 6: Inventaris -->
             <a href="https://sditnurulkautsarbalbod-arch.github.io/Inventaris/" target="_blank" rel="noopener noreferrer" 
-               class="group relative flex items-center p-4 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-2xl border border-white/10 shadow-lg transition-all duration-200 active:scale-[0.98]">
-                <div class="flex-shrink-0 w-10 h-10 bg-orange-500/20 rounded-xl flex items-center justify-center text-orange-200 group-hover:bg-orange-500 group-hover:text-white transition-colors">
+               class="group relative flex items-center p-4 bg-white/40 hover:bg-white/60 dark:bg-slate-800/40 dark:hover:bg-slate-700/60 backdrop-blur-md rounded-2xl border border-white/60 dark:border-slate-600/50 shadow-lg transition-all duration-200 active:scale-[0.98]">
+                <div class="flex-shrink-0 w-10 h-10 bg-white/70 dark:bg-slate-700 rounded-xl flex items-center justify-center text-orange-600 dark:text-orange-400 group-hover:bg-orange-500 group-hover:text-white transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
                     </svg>
                 </div>
-                <span class="flex-grow text-center font-semibold text-white tracking-wide">Inventaris & Buku</span>
-                 <div class="absolute right-4 text-white/30 group-hover:text-white/80 group-hover:translate-x-1 transition-all">
+                <span class="flex-grow text-center font-semibold text-slate-700 dark:text-slate-200 tracking-wide transition-colors duration-700">Inventaris & Buku</span>
+                 <div class="absolute right-4 text-slate-400 dark:text-slate-500 group-hover:text-orange-600 dark:group-hover:text-orange-400 group-hover:translate-x-1 transition-all">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
                     </svg>
@@ -213,14 +255,14 @@
 
             <!-- Link 7: Modul Ajar -->
             <a href="https://modulajarnk.vercel.app/" target="_blank" rel="noopener noreferrer" 
-               class="group relative flex items-center p-4 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-2xl border border-white/10 shadow-lg transition-all duration-200 active:scale-[0.98]">
-                <div class="flex-shrink-0 w-10 h-10 bg-pink-500/20 rounded-xl flex items-center justify-center text-pink-200 group-hover:bg-pink-500 group-hover:text-white transition-colors">
+               class="group relative flex items-center p-4 bg-white/40 hover:bg-white/60 dark:bg-slate-800/40 dark:hover:bg-slate-700/60 backdrop-blur-md rounded-2xl border border-white/60 dark:border-slate-600/50 shadow-lg transition-all duration-200 active:scale-[0.98]">
+                <div class="flex-shrink-0 w-10 h-10 bg-white/70 dark:bg-slate-700 rounded-xl flex items-center justify-center text-pink-600 dark:text-pink-400 group-hover:bg-pink-500 group-hover:text-white transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
                     </svg>
                 </div>
-                <span class="flex-grow text-center font-semibold text-white tracking-wide">Modul Ajar</span>
-                 <div class="absolute right-4 text-white/30 group-hover:text-white/80 group-hover:translate-x-1 transition-all">
+                <span class="flex-grow text-center font-semibold text-slate-700 dark:text-slate-200 tracking-wide transition-colors duration-700">Modul Ajar</span>
+                 <div class="absolute right-4 text-slate-400 dark:text-slate-500 group-hover:text-pink-600 dark:group-hover:text-pink-400 group-hover:translate-x-1 transition-all">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
                     </svg>
@@ -234,24 +276,48 @@
             <div class="flex space-x-6">
                 <!-- Facebook -->
                 <a href="https://www.facebook.com/profile.php?id=100074236762617" target="_blank" rel="noopener noreferrer" 
-                   class="bg-white/10 p-3 rounded-full hover:bg-white/30 hover:scale-110 transition-all text-white backdrop-blur-sm" aria-label="Facebook">
+                   class="bg-white/40 dark:bg-slate-800/40 p-3 rounded-full hover:bg-white/60 dark:hover:bg-slate-700/60 hover:scale-110 transition-all text-slate-600 dark:text-slate-400 hover:text-sky-600 dark:hover:text-sky-300 backdrop-blur-sm" aria-label="Facebook">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
                         <path d="M9.198 21.5h4v-8.01h2.669l.399-3.101h-3.068v-1.979c0-.899.251-1.512 1.533-1.512h1.634V3.887c-.283-.038-1.255-.122-2.388-.122-2.36 0-3.975 1.442-3.975 4.092v2.299H7v3.101h2.198V21.5z" />
                     </svg>
                 </a>
                 <!-- Instagram -->
                 <a href="https://www.instagram.com/sditnurulkautsarmakassar/" target="_blank" rel="noopener noreferrer" 
-                   class="bg-white/10 p-3 rounded-full hover:bg-white/30 hover:scale-110 transition-all text-white backdrop-blur-sm" aria-label="Instagram">
+                   class="bg-white/40 dark:bg-slate-800/40 p-3 rounded-full hover:bg-white/60 dark:hover:bg-slate-700/60 hover:scale-110 transition-all text-slate-600 dark:text-slate-400 hover:text-pink-600 dark:hover:text-pink-400 backdrop-blur-sm" aria-label="Instagram">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
                         <path d="M12 2c-2.717 0-3.056.01-4.122.06-1.065.05-1.79.217-2.428.465a4.902 4.902 0 00-1.772 1.153 4.902 4.902 0 00-1.153 1.772c-.247.637-.415 1.363-.465 2.428C2.013 8.944 2 9.283 2 12s.013 3.056.06 4.122c.05 1.065.217 1.79.465 2.428a4.902 4.902 0 001.153 1.772 4.902 4.902 0 001.772 1.153c.637.247 1.363.415 2.428.465C8.944 21.987 9.283 22 12 22s3.056-.013 4.122-.06c1.065-.05 1.79-.217 2.428-.465a4.902 4.902 0 001.772-1.153 4.902 4.902 0 001.153-1.772c.247-.637.415-1.363.465-2.428C21.987 15.056 22 14.717 22 12s-.013-3.056-.06-4.122c-.05-1.065-.217-1.79-.465-2.428a4.902 4.902 0 00-1.153-1.772 4.902 4.902 0 00-1.772-1.153c-.637-.247-1.363-.415-2.428-.465C15.056 2.013 14.717 2 12 2zm0 1.802c2.67 0 2.987.01 4.042.059.975.044 1.504.207 1.857.344.467.182.8.398 1.15.748.35.35.566.683.748 1.15.137.353.3.882.344 1.857.05 1.055.058 1.372.058 4.042s-.009 2.987-.058 4.042c-.044.975-.207 1.504-.344 1.857a3.097 3.097 0 01-.748 1.15 3.097 3.097 0 01-1.15.748c-.353.137-.882.3-1.857.344-1.055.05-1.372.058-4.042.058s-2.987-.009-4.042-.058c-.975-.044-1.504-.207-1.857-.344a3.097 3.097 0 01-1.15-.748 3.097 3.097 0 01-.748-1.15c-.137-.353-.3-.882-.344-1.857C4.01 15.056 4 14.717 4 12s.009-2.987.058-4.042c.044-.975.207-1.504.344-1.857.182-.467.398-.8.748-1.15.35-.35.683-.566 1.15-.748.353-.137.882-.3 1.857-.344C9.013 3.81 9.33 3.802 12 3.802zM12 7.177a4.823 4.823 0 100 9.646 4.823 4.823 0 000-9.646zm0 1.802a3.02 3.02 0 110 6.04 3.02 3.02 0 010-6.04zM17.53 6.13a1.44 1.44 0 100 2.88 1.44 1.44 0 000-2.88z" />
                     </svg>
                 </a>
             </div>
             
-            <p class="text-xs text-teal-200/60 font-medium">© 2026 SD IT Nurul Kautsar</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 font-medium transition-colors duration-700">© 2026 SD IT Nurul Kautsar</p>
         </footer>
 
     </main>
-    
+
+    <!-- Script Logika Toggle Tema -->
+    <script>
+        const themeToggleBtn = document.getElementById('themeToggle');
+        const htmlElement = document.documentElement;
+
+        // Cek LocalStorage untuk melihat apakah user pernah mengatur tema sebelumnya
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            htmlElement.classList.add('dark');
+        } else {
+            htmlElement.classList.remove('dark');
+        }
+
+        themeToggleBtn.addEventListener('click', function() {
+            // Toggle class 'dark' pada HTML
+            htmlElement.classList.toggle('dark');
+
+            // Simpan preferensi di LocalStorage
+            if (htmlElement.classList.contains('dark')) {
+                localStorage.setItem('color-theme', 'dark');
+            } else {
+                localStorage.setItem('color-theme', 'light');
+            }
+        });
+    </script>
 </body>
 </html>
